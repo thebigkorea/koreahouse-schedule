@@ -514,3 +514,48 @@ th.name-head{
     grid-template-columns:1fr;
   }
 }
+#printScheduleArea{
+  display:none;
+}
+
+.print-title{
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  margin-bottom:10px;
+}
+
+.print-schedule-table{
+  width:100%;
+  border-collapse:collapse;
+  margin-bottom:15px;
+}
+
+.print-schedule-table th,
+.print-schedule-table td{
+  border:1px solid #666;
+  text-align:center;
+  height:28px;
+  font-size:10px;
+}
+
+.print-schedule-table .name{
+  width:70px;
+  font-weight:700;
+}
+
+@media print{
+
+  .wrap{
+    display:none !important;
+  }
+
+  #printScheduleArea{
+    display:block !important;
+  }
+
+  @page{
+    size:A4 landscape;
+    margin:5mm;
+  }
+}

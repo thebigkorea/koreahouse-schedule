@@ -459,8 +459,71 @@ async function updateOffStatus(name, month, offDays, status){
   }
 }
 function printSchedule(){
-  window.print();
+
+  renderPrintSchedule();
+
+  document.body.classList.add("print-mode");
+
+  setTimeout(() => {
+    window.print();
+    document.body.classList.remove("print-mode");
+  }, 300);
+
 }
+
+function renderPrintSchedule(){
+
+  let html = `
+    <div class="print-title">
+      한국의집 근무스케줄
+    </div>
+  `;
+
+  html += createPrintTable(1, 15);
+  html += createPrintTable(16, 31);
+
+  document.getElementById("printScheduleArea").innerHTML = html;
+}
+
+function createPrintTable(startDay, endDay){
+
+  let html = `
+    <table class="print-schedule-table">
+      <thead>
+        <tr>
+          <th>직원명</th>
+  `;
+
+  for(let d = startDay; d <= endDay; d++){
+    html += `<th>${d}</th>`;
+  }
+
+  html += `
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  CURRENT_SCHEDULE.forEach(row => {
+    html += `<tr>`;
+    html += `<td class="name">${row.name}</td>`;
+
+    for(let d = startDay; d <= endDay; d++){
+      const value = row.days?.[d] || "";
+      html += `<td>${cellText(value)}</td>`;
+    }
+
+    html += `</tr>`;
+  });
+
+  html += `
+      </tbody>
+    </table>
+  `;
+
+  return html;
+}
+
 function getPrevMonth(month){
   const [y,m] = month.split("-").map(Number);
   const d = new Date(y, m - 2, 1);
@@ -559,4 +622,65 @@ async function applyApprovedOffRequests(month){
   });
 
   renderRequestSummary(requests);
+}
+function renderPrintSchedule(){
+
+  let html = '';
+
+  html += `
+  <div class="print-title">
+    한국의집 근무스케줄
+  </div>
+  `;
+
+  html += createPrintTable(1,15);
+  html += createPrintTable(16,31);
+
+  document.getElementById("printScheduleArea").innerHTML = html;
+}
+
+function createPrintTable(startDay,endDay){
+
+  let html = `
+  <table class="print-schedule-table">
+    <thead>
+      <tr>
+        <th>직원명</th>
+  `;
+
+  for(let d=startDay; d<=endDay; d++){
+    html += `<th>${d}</th>`;
+  }
+
+  html += `
+      </tr>
+    </thead>
+    <tbody>
+  `;
+
+  CURRENT_SCHEDULE.forEach(row=>{
+
+    html += `<tr>`;
+    html += `<td class="name">${row.name}</td>`;
+
+    for(let d=startDay; d<=endDay; d++){
+
+      const value = row.days?.[d] || "";
+
+      html += `
+      <td>
+        ${cellText(value)}
+      </td>
+      `;
+    }
+
+    html += `</tr>`;
+  });
+
+  html += `
+    </tbody>
+  </table>
+  `;
+
+  return html;
 }
