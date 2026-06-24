@@ -185,6 +185,9 @@ async function loadScheduleBase(){
       month
     });
 
+    console.log("선택한 월:", month);
+    console.log("휴무신청 결과:", requestResult);
+
   const requests =
     requestResult.requests || [];
 
