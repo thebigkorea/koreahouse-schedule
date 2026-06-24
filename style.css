@@ -558,4 +558,34 @@ th.name-head{
     size:A4 landscape;
     margin:5mm;
   }
+
+  @media print{
+
+  *{
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;    
+  }
+
+  .schedule-cell.work{
+    background:#fff !important;
+  }
+
+  .schedule-cell.request-off{
+    background:#ffe08a !important;
+  }
+
+  .schedule-cell.admin-off{
+    background:#bde7ff !important;
+  }
+
+  .schedule-cell.confirmed-off{
+    background:#ffb4b4 !important;
+  }
+
+  .schedule-cell.annual{
+    background:#c8f7c5 !important;
+  }
+
+}
+
 }
