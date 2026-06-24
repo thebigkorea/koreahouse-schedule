@@ -518,33 +518,17 @@ th.name-head{
   display:none;
 }
 
-.print-title{
-  text-align:center;
-  font-size:18px;
-  font-weight:700;
-  margin-bottom:10px;
-}
+@media print {
 
-.print-schedule-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-bottom:15px;
-}
+  @page{
+    size:A4 landscape;
+    margin:5mm;
+  }
 
-.print-schedule-table th,
-.print-schedule-table td{
-  border:1px solid #666;
-  text-align:center;
-  height:28px;
-  font-size:10px;
-}
-
-.print-schedule-table .name{
-  width:70px;
-  font-weight:700;
-}
-
-@media print{
+  *{
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
 
   .wrap{
     display:none !important;
@@ -554,38 +538,24 @@ th.name-head{
     display:block !important;
   }
 
-  @page{
-    size:A4 landscape;
-    margin:5mm;
-  }
-
-  @media print{
-
-  *{
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;    
-  }
-
-  .schedule-cell.work{
+  .print-schedule-table .schedule-cell.work{
     background:#fff !important;
   }
 
-  .schedule-cell.request-off{
+  .print-schedule-table .schedule-cell.request-off{
     background:#ffe08a !important;
   }
 
-  .schedule-cell.admin-off{
+  .print-schedule-table .schedule-cell.admin-off{
     background:#bde7ff !important;
   }
 
-  .schedule-cell.confirmed-off{
+  .print-schedule-table .schedule-cell.confirmed-off{
     background:#ffb4b4 !important;
   }
 
-  .schedule-cell.annual{
+  .print-schedule-table .schedule-cell.annual{
     background:#c8f7c5 !important;
   }
-
-}
 
 }
