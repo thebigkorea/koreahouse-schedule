@@ -573,12 +573,14 @@ async function applyApprovedOffRequests(month){
 }
 function renderPrintSchedule(){
 
-  let html = '';
+  const month = document.getElementById("scheduleMonth").value;
+  const [year, mm] = month.split("-");
 
-  html += `
-  <div class="print-title">
-    한국의집 근무스케줄
-  </div>
+  let html = `
+    <div class="print-header">
+      <h1>한국의집 롯데월드몰점</h1>
+      <h2>${year}년 ${Number(mm)}월 WORK SCHEDULE</h2>
+    </div>
   `;
 
   html += createPrintTable(1,15);

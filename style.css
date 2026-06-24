@@ -530,13 +530,25 @@ th.name-head{
     print-color-adjust: exact !important;
   }
 
-  .wrap{
-    display:none !important;
-  }
+  @media print{
 
-  #printScheduleArea{
-    display:block !important;
-  }
+    body{
+        display:flex;
+        justify-content:center;
+        align-items:flex-start;
+    }
+
+    .wrap{
+        display:none !important;
+    }
+
+    #printScheduleArea{
+        display:block !important;
+        width:95%;
+        margin:0 auto;
+    }
+
+}
 
   .print-schedule-table .schedule-cell.work{
     background:#fff !important;
@@ -591,4 +603,22 @@ th.name-head{
 .print-schedule-table .available-row td{
   background:#eef4ff !important;
   font-weight:900;
+}
+.print-header{
+    text-align:center;
+    margin-bottom:16px;
+}
+
+.print-header h1{
+    margin:0;
+    font-size:26px;
+    font-weight:900;
+    letter-spacing:1px;
+}
+
+.print-header h2{
+    margin:6px 0 0;
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:3px;
 }
