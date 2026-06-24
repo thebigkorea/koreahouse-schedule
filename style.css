@@ -400,3 +400,47 @@ th.name-head{
 .off-actions button.reject{
   background:#991b1b;
 }
+/* 인쇄 전용 */
+@media print {
+
+  @page{
+    size:A4 landscape;
+    margin:8mm;
+  }
+
+  body{
+    background:#fff;
+  }
+
+  .tabs,
+  .print-btn,
+  .legend,
+  .off-request-panel,
+  .control-area{
+    display:none !important;
+  }
+
+  .wrap{
+    max-width:none;
+    width:100%;
+    margin:0;
+    padding:0;
+  }
+
+  .header{
+    padding:10px;
+    margin-bottom:10px;
+  }
+
+  .schedule-table{
+    width:100%;
+    table-layout:fixed;
+    font-size:10px;
+  }
+
+  .schedule-table th,
+  .schedule-table td{
+    padding:2px;
+    height:24px;
+  }
+}

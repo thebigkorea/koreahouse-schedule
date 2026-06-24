@@ -458,3 +458,6 @@ async function updateOffStatus(name, month, offDays, status){
     alert(result.message || "처리 중 오류가 발생했습니다.");
   }
 }
+function printSchedule(){
+  window.print();
+}
