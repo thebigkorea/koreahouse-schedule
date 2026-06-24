@@ -589,15 +589,32 @@ function renderPrintSchedule(){
 
 function createPrintTable(startDay,endDay){
 
+  const month = document.getElementById("scheduleMonth").value;
+
+  const dayNames = ["일","월","화","수","목","금","토"];
+
   let html = `
   <table class="print-schedule-table">
     <thead>
       <tr>
-        <th>직원명</th>
+        <th rowspan="2">직원명</th>
   `;
 
   for(let d=startDay; d<=endDay; d++){
-    html += `<th>${d}</th>`;
+    const week = getWeekday(month, d);
+    const weekendClass = week === 0 ? "sunday" : week === 6 ? "saturday" : "";
+    html += `<th class="${weekendClass}">${d}</th>`;
+  }
+
+  html += `
+      </tr>
+      <tr>
+  `;
+
+  for(let d=startDay; d<=endDay; d++){
+    const week = getWeekday(month, d);
+    const weekendClass = week === 0 ? "sunday" : week === 6 ? "saturday" : "";
+    html += `<th class="${weekendClass}">${dayNames[week]}</th>`;
   }
 
   html += `
@@ -614,16 +631,40 @@ function createPrintTable(startDay,endDay){
     for(let d=startDay; d<=endDay; d++){
 
       const value = row.days?.[d] || "work";
+      const week = getWeekday(month, d);
+      const weekendClass = week === 0 ? "sunday" : week === 6 ? "saturday" : "";
 
       html += `
-      <td class="schedule-cell ${value}">
+      <td class="schedule-cell ${value} ${weekendClass}">
         ${cellText(value)}
       </td>
-     `;
+      `;
     }
 
     html += `</tr>`;
   });
+
+  html += `
+    <tr class="available-row">
+      <td class="name">근무 가능</td>
+  `;
+
+  for(let d=startDay; d<=endDay; d++){
+
+    const availableCount = CURRENT_SCHEDULE.filter(row=>{
+      const value = row.days?.[d] || "work";
+      return value === "work";
+    }).length;
+
+    const week = getWeekday(month, d);
+    const weekendClass = week === 0 ? "sunday" : week === 6 ? "saturday" : "";
+
+    html += `<td class="${weekendClass}">${availableCount}</td>`;
+  }
+
+  html += `
+    </tr>
+  `;
 
   html += `
     </tbody>
