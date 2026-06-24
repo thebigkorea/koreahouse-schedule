@@ -227,17 +227,28 @@ function renderRequestSummary(requests){
     document.getElementById("offRequestSummary");
 
   if(!requests.length){
-
-    wrap.innerHTML =
-      "휴무 신청 내역이 없습니다.";
-
+    wrap.innerHTML = "휴무 신청 내역이 없습니다.";
     return;
   }
 
   wrap.innerHTML =
-    requests.map(r=>
-      `• ${r.name} : ${r.offDays}`
-    ).join("<br>");
+    requests.map(r=>`
+      <div class="off-item">
+        <div>
+          <b>${r.name}</b> : ${r.offDays}
+          <span class="status">[${r.status}]</span>
+        </div>
+
+        <div class="off-actions">
+          <button onclick="updateOffStatus('${r.name}','${r.month}','${r.offDays}','승인')">
+            승인
+          </button>
+          <button class="reject" onclick="updateOffStatus('${r.name}','${r.month}','${r.offDays}','반려')">
+            반려
+          </button>
+        </div>
+      </div>
+    `).join("");
 }
 
 function renderScheduleTable(){
@@ -429,4 +440,21 @@ async function viewEmployeeSchedule(){
   }
 
   wrap.innerHTML = html;
+}
+async function updateOffStatus(name, month, offDays, status){
+
+  const result = await api({
+    action:"updateOffRequestStatus",
+    name,
+    month,
+    offDays,
+    status
+  });
+
+  if(result.success){
+    alert(status + " 처리되었습니다.");
+    await loadScheduleBase();
+  }else{
+    alert(result.message || "처리 중 오류가 발생했습니다.");
+  }
 }
