@@ -317,13 +317,13 @@ function cellText(type){
   switch(type){
 
     case "request-off":
-      return "희망";
+      return "D/O";
 
     case "admin-off":
-      return "관리";
+      return "D/O";
 
     case "confirmed-off":
-      return "휴무";
+      return "D/O";
 
     case "annual":
       return "연차";
