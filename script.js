@@ -461,3 +461,102 @@ async function updateOffStatus(name, month, offDays, status){
 function printSchedule(){
   window.print();
 }
+function getPrevMonth(month){
+  const [y,m] = month.split("-").map(Number);
+  const d = new Date(y, m - 2, 1);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+
+function getWeekday(yearMonth, day){
+  const [y,m] = yearMonth.split("-").map(Number);
+  return new Date(y, m - 1, day).getDay();
+}
+
+function daysInMonth(yearMonth){
+  const [y,m] = yearMonth.split("-").map(Number);
+  return new Date(y, m, 0).getDate();
+}
+
+async function copyPrevMonthWeekPattern(){
+
+  const month = document.getElementById("scheduleMonth").value;
+
+  if(!month){
+    alert("기준월을 선택하세요.");
+    return;
+  }
+
+  const prevMonth = getPrevMonth(month);
+
+  const result = await api({
+    action:"getMonthlySchedule",
+    month:prevMonth
+  });
+
+  if(!result.success || !result.schedules || !result.schedules.length){
+    alert("전월 저장 근무표가 없습니다.");
+    return;
+  }
+
+  const currentLastDay = daysInMonth(month);
+  const prevLastDay = daysInMonth(prevMonth);
+
+  CURRENT_SCHEDULE = STAFF_LIST.map(staff => {
+    const prev = result.schedules.find(s => s.name === staff.name);
+    const days = {};
+
+    if(prev && prev.days){
+      for(let prevDay = 1; prevDay <= prevLastDay; prevDay++){
+        const prevValue = prev.days[prevDay];
+
+        if(!prevValue || prevValue === "work") continue;
+
+        const prevWeekday = getWeekday(prevMonth, prevDay);
+
+        for(let currentDay = 1; currentDay <= currentLastDay; currentDay++){
+          if(getWeekday(month, currentDay) === prevWeekday){
+            days[currentDay] = prevValue;
+          }
+        }
+      }
+    }
+
+    return {
+      name:staff.name,
+      days
+    };
+  });
+
+  await applyApprovedOffRequests(month);
+
+  renderScheduleTable();
+
+  alert(`${prevMonth} 요일패턴을 ${month} 근무표에 반영했습니다.`);
+}
+
+async function applyApprovedOffRequests(month){
+
+  const requestResult = await api({
+    action:"getOffRequests",
+    month
+  });
+
+  const requests = requestResult.requests || [];
+
+  requests.forEach(r => {
+    if(r.status !== "승인") return;
+
+    const target = CURRENT_SCHEDULE.find(s => s.name === r.name);
+    if(!target) return;
+
+    String(r.offDays)
+      .split(",")
+      .forEach(day => {
+        if(day){
+          target.days[Number(day)] = "request-off";
+        }
+      });
+  });
+
+  renderRequestSummary(requests);
+}

@@ -56,12 +56,25 @@
     <section id="admin" class="panel">
       <h2>관리자 월별 근무표 작성</h2>
 
-      <div class="toolbar">
-        <input type="month" id="scheduleMonth">
-        <button onclick="loadScheduleBase()">근무표 생성</button>
-        <button onclick="loadSavedSchedule()">저장된 근무표 불러오기</button>
-        <button onclick="saveMonthlySchedule()" class="save">근무표 저장</button>
-      </div>
+      <div class="toolbar schedule-toolbar">
+  <input type="month" id="scheduleMonth">
+
+  <button onclick="loadScheduleBase()">
+    근무표 생성
+  </button>
+
+  <button onclick="copyPrevMonthWeekPattern()" class="pattern-btn">
+    전월 요일패턴 불러오기
+  </button>
+
+  <button onclick="saveMonthlySchedule()" class="save">
+    근무표 저장
+  </button>
+
+  <button onclick="loadSavedSchedule()" class="load-btn">
+    근무표 불러오기
+  </button>
+</div>
 
       <div class="legend">
         <span><b class="work"></b> 근무</span>

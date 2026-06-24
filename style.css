@@ -444,3 +444,22 @@ th.name-head{
     height:24px;
   }
 }
+.schedule-toolbar{
+  display:grid;
+  grid-template-columns:220px 160px 220px 160px 180px;
+  align-items:center;
+}
+
+.pattern-btn{
+  background:#8b5b2b !important;
+}
+
+.load-btn{
+  background:#5b4636 !important;
+}
+
+@media(max-width:900px){
+  .schedule-toolbar{
+    grid-template-columns:1fr;
+  }
+}
