@@ -586,6 +586,20 @@ function renderPrintSchedule(){
   html += createPrintTable(1,15);
   html += createPrintTable(16,31);
 
+  html += `
+    <div class="print-legend">
+      <span><b class="legend-request"></b>요청</span>
+      <span><b class="legend-admin"></b>관리</span>
+      <span><b class="legend-confirmed"></b>승인</span>
+      <span><b class="legend-annual"></b>연차</span>
+      <span><b class="legend-saturday"></b>토요일</span>
+      <span><b class="legend-sunday"></b>일요일</span>
+    </div>
+    <div class="print-note">
+      ※ 근무 가능 인원: 휴무/관리/승인/연차가 아닌 직원 수
+    </div>
+  `;
+
   document.getElementById("printScheduleArea").innerHTML = html;
 }
 
