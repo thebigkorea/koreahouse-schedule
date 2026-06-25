@@ -518,18 +518,6 @@ th.name-head{
   display:none;
 }
 
-@media print {
-
-  @page{
-    size:A4 landscape;
-    margin:5mm;
-  }
-
-  *{
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-
  @media print {
 
   @page{

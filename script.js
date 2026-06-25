@@ -605,9 +605,13 @@ function renderPrintSchedule(){
 
 function createPrintTable(startDay,endDay){
 
-  const month = document.getElementById("scheduleMonth").value;
+    const month = document.getElementById("scheduleMonth").value;
+    const [year, mm] = month.split("-");
 
-  const dayNames = ["일","월","화","수","목","금","토"];
+    // 해당 월의 마지막 날짜 계산
+    endDay = Math.min(endDay, new Date(year, mm, 0).getDate());
+
+    const dayNames = ["일","월","화","수","목","금","토"];
 
   let html = `
   <table class="print-schedule-table">
