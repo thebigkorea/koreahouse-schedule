@@ -5,16 +5,16 @@ let STAFF_LIST = [];
 let CURRENT_SCHEDULE = [];
 
 window.onload = async () => {
-  createDayCheckboxes();
   await loadStaffList();
 
   const now = new Date();
   const month =
     `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}`;
 
-  document.getElementById("offMonth").value = month;
   document.getElementById("scheduleMonth").value = month;
   document.getElementById("viewMonth").value = month;
+
+  showTab("admin");
 };
 
 function showTab(id){
@@ -34,25 +34,7 @@ function showTab(id){
   event.target.classList.add("active");
 }
 
-function createDayCheckboxes(){
 
-  const box =
-    document.getElementById("offDayList");
-
-  let html = "";
-
-  for(let i=1;i<=31;i++){
-
-    html += `
-      <label>
-        <input type="checkbox" value="${i}">
-        ${i}일
-      </label>
-    `;
-  }
-
-  box.innerHTML = html;
-}
 
 async function api(data){
 
@@ -79,16 +61,13 @@ async function loadStaffList(){
 }
 
 function renderStaffSelect(){
-
-  const names =
-    STAFF_LIST.map(s=>s.name);
+  const names = STAFF_LIST.map(s=>s.name);
 
   const html =
     names.map(name=>
       `<option value="${name}">${name}</option>`
     ).join("");
 
-  document.getElementById("offName").innerHTML = html;
   document.getElementById("viewName").innerHTML = html;
 }
 
@@ -131,43 +110,7 @@ async function saveStaff(){
   await loadStaffList();
 }
 
-async function saveOffRequest(){
 
-  const month =
-    document.getElementById("offMonth").value;
-
-  const name =
-    document.getElementById("offName").value;
-
-  const reason =
-    document.getElementById("offReason").value;
-
-  const offDays =
-    [...document.querySelectorAll("#offDayList input:checked")]
-    .map(el=>el.value)
-    .join(",");
-
-  if(!offDays){
-    alert("휴무일을 선택하세요.");
-    return;
-  }
-
-  const result = await api({
-    action:"saveOffRequest",
-    month,
-    name,
-    offDays,
-    reason
-  });
-
-  alert(result.message);
-
-  document
-    .querySelectorAll("#offDayList input")
-    .forEach(el=>el.checked=false);
-
-  document.getElementById("offReason").value="";
-}
 
 async function loadScheduleBase(){
 
@@ -221,35 +164,7 @@ async function loadScheduleBase(){
   renderScheduleTable();
 }
 
-function renderRequestSummary(requests){
 
-  const wrap =
-    document.getElementById("offRequestSummary");
-
-  if(!requests.length){
-    wrap.innerHTML = "휴무 신청 내역이 없습니다.";
-    return;
-  }
-
-  wrap.innerHTML =
-    requests.map(r=>`
-      <div class="off-item">
-        <div>
-          <b>${r.name}</b> : ${r.offDays}
-          <span class="status">[${r.status}]</span>
-        </div>
-
-        <div class="off-actions">
-          <button onclick="updateOffStatus('${r.name}','${r.month}','${r.offDays}','승인')">
-            승인
-          </button>
-          <button class="reject" onclick="updateOffStatus('${r.name}','${r.month}','${r.offDays}','반려')">
-            반려
-          </button>
-        </div>
-      </div>
-    `).join("");
-}
 
 function renderScheduleTable(){
 
@@ -441,23 +356,7 @@ async function viewEmployeeSchedule(){
 
   wrap.innerHTML = html;
 }
-async function updateOffStatus(name, month, offDays, status){
 
-  const result = await api({
-    action:"updateOffRequestStatus",
-    name,
-    month,
-    offDays,
-    status
-  });
-
-  if(result.success){
-    alert(status + " 처리되었습니다.");
-    await loadScheduleBase();
-  }else{
-    alert(result.message || "처리 중 오류가 발생했습니다.");
-  }
-}
 function printSchedule(){
 
   renderPrintSchedule();
@@ -545,32 +444,7 @@ async function copyPrevMonthWeekPattern(){
   alert(`${prevMonth} 요일패턴을 ${month} 근무표에 반영했습니다.`);
 }
 
-async function applyApprovedOffRequests(month){
 
-  const requestResult = await api({
-    action:"getOffRequests",
-    month
-  });
-
-  const requests = requestResult.requests || [];
-
-  requests.forEach(r => {
-    if(r.status !== "승인") return;
-
-    const target = CURRENT_SCHEDULE.find(s => s.name === r.name);
-    if(!target) return;
-
-    String(r.offDays)
-      .split(",")
-      .forEach(day => {
-        if(day){
-          target.days[Number(day)] = "request-off";
-        }
-      });
-  });
-
-  renderRequestSummary(requests);
-}
 function renderPrintSchedule(){
 
   const month = document.getElementById("scheduleMonth").value;

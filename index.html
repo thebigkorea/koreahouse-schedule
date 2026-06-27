@@ -13,14 +13,13 @@
     <header class="header">
       <div>
         <h1>한국의집 근무스케줄관리</h1>
-        <p>휴무신청 · 월별 근무표 작성 · 근무표 조회</p>
+        <p>월별 근무표 작성 · 주간 스케줄 작성 · 근무표 조회</p>
       </div>
       <button onclick="printSchedule()" class="print-btn">근무표 출력</button>
     </header>
 
-    <section class="tabs">      
-      <button class="tab active" onclick="showTab('off')">휴무신청</button>
-      <button class="tab" onclick="showTab('admin')">관리자 작성</button>
+    <section class="tabs">            
+      <button class="tab active" onclick="showTab('admin')">관리자 작성</button>
       <button class="tab-btn"
         onclick="window.open('https://docs.google.com/spreadsheets/d/1y1f4noa90DCA_YxZYx9MXe_A523Z5g2raeLU4d4wwb4/edit?gid=1328921358#gid=1328921358', '_blank')">
         주간 스케줄표 작성
@@ -29,35 +28,9 @@
       <button class="tab" onclick="showTab('staff')">직원등록</button>
     </section>
 
-    <section id="off" class="panel active">
-      <h2>직원 휴무신청</h2>
+   
 
-      <div class="form-grid">
-        <label>
-          신청월
-          <input type="month" id="offMonth">
-        </label>
-
-        <label>
-          직원명
-          <select id="offName"></select>
-        </label>
-
-        <label class="wide">
-          휴무희망일
-          <div id="offDayList" class="day-checks"></div>
-        </label>
-
-        <label class="wide">
-          사유
-          <input type="text" id="offReason" placeholder="예: 개인사정, 병원, 가족일정">
-        </label>
-      </div>
-
-      <button class="main-btn" onclick="saveOffRequest()">휴무 신청 저장</button>
-    </section>
-
-    <section id="admin" class="panel">
+    <section id="admin" class="panel active">
       <h2>관리자 월별 근무표 작성</h2>
 
       <div class="toolbar schedule-toolbar">
