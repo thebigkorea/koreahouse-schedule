@@ -50,13 +50,9 @@ function setWorkStatus(show, message = "처리중입니다..."){
 
   const box = document.getElementById("workStatus");
 
-  if(!box) return;
-
-  if(show){
+  if(box){
     box.textContent = message;
-    box.classList.remove("hidden");
-  }else{
-    box.classList.add("hidden");
+    box.style.display = show ? "block" : "none";
   }
 
   document
@@ -65,7 +61,6 @@ function setWorkStatus(show, message = "처리중입니다..."){
       btn.disabled = show;
       btn.classList.toggle("processing", show);
     });
-
 }
 
 async function loadStaffList(){

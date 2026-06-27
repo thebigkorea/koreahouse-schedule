@@ -668,3 +668,18 @@ th.name-head{
     font-weight:700 !important;
   }
 }
+.work-status{
+  margin:12px 0;
+  padding:14px 18px;
+  border-radius:14px;
+  background:#fff4d6;
+  color:#5b3518;
+  font-weight:900;
+  text-align:center;
+  border:1px solid #e1c48a;
+}
+
+.processing{
+  opacity:.55;
+  cursor:wait;
+}
