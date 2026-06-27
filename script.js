@@ -118,48 +118,19 @@ async function loadScheduleBase(){
     document.getElementById("scheduleMonth").value;
 
   if(!month){
-    alert("기준월 선택");
+    alert("기준월을 선택하세요.");
     return;
   }
 
-  const requestResult =
-    await api({
-      action:"getOffRequests",
-      month
-    });
-
-    console.log("선택한 월:", month);
-    console.log("휴무신청 결과:", requestResult);
-
-  const requests =
-    requestResult.requests || [];
-
-  renderRequestSummary(requests);
+  if(!STAFF_LIST.length){
+    await loadStaffList();
+  }
 
   CURRENT_SCHEDULE =
-    STAFF_LIST.map(staff=>{
-
-      const days = {};
-
-      requests.forEach(r=>{
-
-        if(r.name !== staff.name) return;
-
-        String(r.offDays)
-          .split(",")
-          .forEach(day=>{
-
-            days[day] =
-              "request-off";
-          });
-
-      });
-
-      return {
-        name:staff.name,
-        days
-      };
-    });
+    STAFF_LIST.map(staff => ({
+      name: staff.name,
+      days: {}
+    }));
 
   renderScheduleTable();
 }
