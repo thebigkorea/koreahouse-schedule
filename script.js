@@ -167,6 +167,8 @@ async function loadScheduleBase(){
 
     renderScheduleTable();
 
+    renderOffSummary();
+
   }catch(err){
     console.error(err);
     alert("근무표 생성 중 오류가 발생했습니다.");
@@ -585,4 +587,23 @@ function createPrintTable(startDay,endDay){
   `;
 
   return html;
+}
+function renderOffSummary(){
+  const box = document.getElementById("offRequestSummary");
+  if(!box) return;
+
+  const lines = CURRENT_SCHEDULE.map(staff => {
+    const days = Object.keys(staff.days || {})
+      .filter(day => staff.days[day] && staff.days[day] !== "work")
+      .map(day => `${day}일`)
+      .join(", ");
+
+    if(!days) return "";
+
+    return `<span><b>${staff.name}</b> ${days}</span>`;
+  }).filter(Boolean);
+
+  box.innerHTML = lines.length
+    ? lines.join(" / ")
+    : "등록된 휴무가 없습니다.";
 }

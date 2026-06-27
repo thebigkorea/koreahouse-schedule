@@ -683,3 +683,17 @@ th.name-head{
   opacity:.55;
   cursor:wait;
 }
+.tabs .tab-btn{
+  border:1px solid #d9c7ad;
+  border-radius:999px;
+  padding:14px 24px;
+  background:#fffaf2;
+  color:#24170f;
+  font-size:15px;
+  font-weight:900;
+  cursor:pointer;
+}
+
+.tabs .tab-btn:hover{
+  background:#f1e5d5;
+}
