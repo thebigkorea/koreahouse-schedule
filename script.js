@@ -46,6 +46,28 @@ async function api(data){
   return await res.json();
 }
 
+function setWorkStatus(show, message = "처리중입니다..."){
+
+  const box = document.getElementById("workStatus");
+
+  if(!box) return;
+
+  if(show){
+    box.textContent = message;
+    box.classList.remove("hidden");
+  }else{
+    box.classList.add("hidden");
+  }
+
+  document
+    .querySelectorAll(".schedule-toolbar button")
+    .forEach(btn=>{
+      btn.disabled = show;
+      btn.classList.toggle("processing", show);
+    });
+
+}
+
 async function loadStaffList(){
 
   const result = await api({
@@ -113,40 +135,49 @@ async function saveStaff(){
 
 
 async function loadScheduleBase(){
+  setWorkStatus(true, "근무표를 생성하는 중입니다...");
 
-  const month = document.getElementById("scheduleMonth").value;
+  try{
+    const month = document.getElementById("scheduleMonth").value;
 
-  if(!month){
-    alert("기준월을 선택하세요.");
-    return;
-  }
+    if(!month){
+      alert("기준월을 선택하세요.");
+      return;
+    }
 
-  if(!STAFF_LIST.length){
-    await loadStaffList();
-  }
+    if(!STAFF_LIST.length){
+      await loadStaffList();
+    }
 
-  const result = await api({
-    action:"getMonthlySchedule",
-    month
-  });
-
-  if(result.success && result.schedules && result.schedules.length){
-    CURRENT_SCHEDULE = STAFF_LIST.map(staff => {
-      const saved = result.schedules.find(s => s.name === staff.name);
-
-      return {
-        name: staff.name,
-        days: saved && saved.days ? saved.days : {}
-      };
+    const result = await api({
+      action:"getMonthlySchedule",
+      month
     });
-  }else{
-    CURRENT_SCHEDULE = STAFF_LIST.map(staff => ({
-      name: staff.name,
-      days: {}
-    }));
-  }
 
-  renderScheduleTable();
+    if(result.success && result.schedules && result.schedules.length){
+      CURRENT_SCHEDULE = STAFF_LIST.map(staff => {
+        const saved = result.schedules.find(s => s.name === staff.name);
+
+        return {
+          name: staff.name,
+          days: saved && saved.days ? saved.days : {}
+        };
+      });
+    }else{
+      CURRENT_SCHEDULE = STAFF_LIST.map(staff => ({
+        name: staff.name,
+        days: {}
+      }));
+    }
+
+    renderScheduleTable();
+
+  }catch(err){
+    console.error(err);
+    alert("근무표 생성 중 오류가 발생했습니다.");
+  }finally{
+    setWorkStatus(false);
+  }
 }
 
 
@@ -266,27 +297,36 @@ async function saveMonthlySchedule(){
 
 async function loadSavedSchedule(){
 
-  const month =
-    document.getElementById("scheduleMonth").value;
+  setWorkStatus(true,"근무표 불러오는 중입니다...");
 
-  const result =
-    await api({
-      action:"getMonthlySchedule",
-      month
-    });
+  try{
 
-  if(!result.schedules.length){
-    alert("저장된 근무표가 없습니다.");
-    return;
+    const month =
+      document.getElementById("scheduleMonth").value;
+
+    const result =
+      await api({
+        action:"getMonthlySchedule",
+        month
+      });
+
+    if(!result.schedules.length){
+      alert("저장된 근무표가 없습니다.");
+      return;
+    }
+
+    CURRENT_SCHEDULE =
+      result.schedules.map(s=>({
+        name:s.name,
+        days:s.days
+      }));
+
+    renderScheduleTable();
+
+  }finally{
+    setWorkStatus(false);
   }
 
-  CURRENT_SCHEDULE =
-    result.schedules.map(s=>({
-      name:s.name,
-      days:s.days
-    }));
-
-  renderScheduleTable();
 }
 
 async function viewEmployeeSchedule(){
