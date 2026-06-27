@@ -114,8 +114,7 @@ async function saveStaff(){
 
 async function loadScheduleBase(){
 
-  const month =
-    document.getElementById("scheduleMonth").value;
+  const month = document.getElementById("scheduleMonth").value;
 
   if(!month){
     alert("기준월을 선택하세요.");
@@ -126,15 +125,29 @@ async function loadScheduleBase(){
     await loadStaffList();
   }
 
-  CURRENT_SCHEDULE =
-    STAFF_LIST.map(staff => ({
+  const result = await api({
+    action:"getMonthlySchedule",
+    month
+  });
+
+  if(result.success && result.schedules && result.schedules.length){
+    CURRENT_SCHEDULE = STAFF_LIST.map(staff => {
+      const saved = result.schedules.find(s => s.name === staff.name);
+
+      return {
+        name: staff.name,
+        days: saved && saved.days ? saved.days : {}
+      };
+    });
+  }else{
+    CURRENT_SCHEDULE = STAFF_LIST.map(staff => ({
       name: staff.name,
       days: {}
     }));
+  }
 
   renderScheduleTable();
 }
-
 
 
 function renderScheduleTable(){
