@@ -34,6 +34,7 @@
       <h2>관리자 월별 근무표 작성</h2>
 
       <div class="toolbar schedule-toolbar">
+
   <input type="month" id="scheduleMonth">
 
   <button onclick="loadScheduleBase()">
@@ -51,15 +52,22 @@
   <button onclick="loadSavedSchedule()" class="load-btn">
     근무표 불러오기
   </button>
+
 </div>
 
-      <div class="legend">
-        <span><b class="work"></b> 근무</span>
-        <span><b class="request-off"></b> 직원 희망휴무</span>
-        <span><b class="admin-off"></b> 관리자 지정휴무</span>
-        <span><b class="confirmed-off"></b> 최종확정휴무</span>
-        <span><b class="annual"></b> 연차</span>
-      </div>
+<!-- ▼▼ 여기 추가 ▼▼ -->
+<div id="workStatus" class="work-status hidden">
+  처리중입니다...
+</div>
+<!-- ▲▲ 여기까지 ▲▲ -->
+
+<div class="legend">
+  <span><b class="work"></b> 근무</span>
+  <span><b class="request-off"></b> 직원 희망휴무</span>
+  <span><b class="admin-off"></b> 관리자 지정휴무</span>
+  <span><b class="confirmed-off"></b> 최종확정휴무</span>
+  <span><b class="annual"></b> 연차</span>
+</div>
 
       <div id="offRequestSummary" class="summary"></div>
 
