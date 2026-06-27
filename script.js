@@ -620,3 +620,40 @@ async function deleteStaff(staffId, name){
 
   await loadStaffList();
 }
+async function loadRetiredStaffList(){
+  const result = await api({
+    action:"getRetiredStaffList"
+  });
+
+  const wrap = document.getElementById("retiredStaffList");
+
+  if(!result.success || !result.staff.length){
+    wrap.innerHTML = "퇴사자가 없습니다.";
+    return;
+  }
+
+  wrap.innerHTML = result.staff.map(s => `
+    <div class="staff-card">
+      <strong>${s.name}</strong>
+      <div>${s.type}</div>
+      <div>${s.role}</div>
+      <button class="restore-btn" onclick="restoreStaff('${s.staffId}', '${s.name}')">
+        복구
+      </button>
+    </div>
+  `).join("");
+}
+
+async function restoreStaff(staffId, name){
+  if(!confirm(`${name} 직원을 다시 복구할까요?`)) return;
+
+  const result = await api({
+    action:"restoreStaff",
+    staffId
+  });
+
+  alert(result.message || "복구되었습니다.");
+
+  await loadStaffList();
+  await loadRetiredStaffList();
+}
