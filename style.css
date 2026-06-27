@@ -697,3 +697,13 @@ th.name-head{
 .tabs .tab-btn:hover{
   background:#f1e5d5;
 }
+.delete-btn{
+  margin-top:12px;
+  padding:10px 14px;
+  border:0;
+  border-radius:12px;
+  background:#b91c1c;
+  color:#fff;
+  font-weight:900;
+  cursor:pointer;
+}

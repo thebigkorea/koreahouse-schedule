@@ -89,9 +89,7 @@ function renderStaffSelect(){
 }
 
 function renderStaffCards(){
-
-  const wrap =
-    document.getElementById("staffList");
+  const wrap = document.getElementById("staffList");
 
   wrap.innerHTML =
     STAFF_LIST.map(s=>`
@@ -99,6 +97,9 @@ function renderStaffCards(){
         <strong>${s.name}</strong>
         <div>${s.type}</div>
         <div>${s.role}</div>
+        <button class="delete-btn" onclick="deleteStaff('${s.staffId}', '${s.name}')">
+          퇴사 처리
+        </button>
       </div>
     `).join("");
 }
@@ -606,4 +607,16 @@ function renderOffSummary(){
   box.innerHTML = lines.length
     ? lines.join(" / ")
     : "등록된 휴무가 없습니다.";
+}
+async function deleteStaff(staffId, name){
+  if(!confirm(`${name} 직원을 퇴사 처리할까요?`)) return;
+
+  const result = await api({
+    action:"deleteStaff",
+    staffId
+  });
+
+  alert(result.message || "처리되었습니다.");
+
+  await loadStaffList();
 }
